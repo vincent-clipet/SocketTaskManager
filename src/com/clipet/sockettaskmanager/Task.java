@@ -11,7 +11,7 @@ public class Task
 	// ATTRIBUTES
 	//
 	private final String name;
-	private final String desc;
+	private String desc;
 	private final String author;
 	private final int id;
 
@@ -69,6 +69,11 @@ public class Task
 	{
 		return this.desc;
 	}
+	
+	public void setDesc(String desc)
+	{
+		this.desc = desc;
+	}
 
 	public String getAuthor()
 	{
@@ -123,6 +128,21 @@ public class Task
 		return null;
 	}
 
+	public static ArrayList<Task> getTasksByWorker(String worker)
+	{
+		ArrayList<Task> ret = new ArrayList<Task>();
+
+		for (Entry<String, Task> entry : Task.tasks.entrySet())
+		{
+			Task t = entry.getValue();
+
+			if (t.getWorker().equals(worker))
+				ret.add(t);
+		}
+
+		return ret;
+	}
+
 	public static ArrayList<Task> getTasksByStatus(String status)
 	{
 		ArrayList<Task> ret = new ArrayList<Task>();
@@ -136,6 +156,22 @@ public class Task
 		}
 
 		return ret;
+	}
+
+	public static ArrayList<Task> getAllTasks()
+	{
+		ArrayList<Task> ret = new ArrayList<Task>();
+
+		for (Entry<String, Task> entry : Task.tasks.entrySet())
+			ret.add(entry.getValue());
+
+		return ret;
+	}
+
+	public String toString()
+	{
+		//TODO
+		return null;
 	}
 
 }

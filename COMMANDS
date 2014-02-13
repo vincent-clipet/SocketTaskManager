@@ -1,5 +1,6 @@
 * LOGIN 			(name)
 
+* GET_BY_ID			(id)
 * GET_BY_NAME		(name)
 * GET_BY_STATUS		(status)
 * GET_BY_WORKER		(worker)
@@ -7,6 +8,7 @@
 
 * ASSIGN			(name)
 * STATUS			(status)
+* DESC				(desc)
 
 * CREATE			(name) [desc]
 * DELETE

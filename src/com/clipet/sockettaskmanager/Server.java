@@ -75,9 +75,9 @@ public class Server
 			toSend = new PrintWriter(socket.getOutputStream(), true);	
 			toRead = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String line = toRead.readLine();
-			
+
 			String answer = client.processRequest(line);
-			
+
 			toSend.println(answer);
 		}
 		catch (IOException e)
