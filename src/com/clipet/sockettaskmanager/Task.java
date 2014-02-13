@@ -1,0 +1,141 @@
+package com.clipet.sockettaskmanager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+public class Task
+{
+
+	//
+	// ATTRIBUTES
+	//
+	private final String name;
+	private final String desc;
+	private final String author;
+	private final int id;
+
+	private String worker;
+	private String status;
+
+	private static int currentId = 1;
+	private static HashMap<String, Task> tasks = new HashMap<String, Task>();
+
+
+
+	//
+	// CONSTRUCTOR
+	//
+	public Task(String name, String desc, String author)
+	{
+		this.name = name;
+		this.desc = desc;
+		this.author = author;
+		this.id = Task.currentId;
+		Task.currentId++;
+		this.worker = null;
+		this.status = "libre";
+
+		Task.tasks.put(name, this);
+	}
+
+
+
+	//
+	// METHODS
+	//
+	public void assign(String worker, String status)
+	{
+		this.setWorker(worker);
+		this.setStatus(status);
+	}
+
+	public boolean delete(String name)
+	{
+		return Task.tasks.remove(name) != null;
+	}
+
+
+
+	//
+	// GET & SET
+	//
+	public String getName()
+	{
+		return this.name;
+	}
+
+	public String getDesc()
+	{
+		return this.desc;
+	}
+
+	public String getAuthor()
+	{
+		return this.author;
+	}
+
+	public int getId()
+	{
+		return this.id;
+	}
+
+	public String getWorker()
+	{
+		return this.worker;
+	}
+
+	public void setWorker(String worker)
+	{
+		this.worker = worker;
+	}
+
+	public String getStatus()
+	{
+		return this.status;
+	}
+
+	public void setStatus(String status)
+	{
+		this.status = status;
+	}
+
+
+
+	//
+	// UTIL
+	//	
+	public static Task getTaskByName(String name)
+	{
+		return Task.tasks.get(name);
+	}
+
+	public static Task getTaskById(int id)
+	{
+		for (Entry<String, Task> entry : Task.tasks.entrySet())
+		{
+			Task t = entry.getValue();
+
+			if (t.getId() == id)
+				return t;
+		}
+
+		return null;
+	}
+
+	public static ArrayList<Task> getTasksByStatus(String status)
+	{
+		ArrayList<Task> ret = new ArrayList<Task>();
+
+		for (Entry<String, Task> entry : Task.tasks.entrySet())
+		{
+			Task t = entry.getValue();
+
+			if (t.getStatus().equals(status))
+				ret.add(t);
+		}
+
+		return ret;
+	}
+
+}

@@ -1,0 +1,12 @@
+* LOGIN 			(name)
+
+* GET_BY_NAME		(name)
+* GET_BY_STATUS		(status)
+* GET_BY_WORKER		(worker)
+* GET_ALL
+
+* ASSIGN			(name)
+* STATUS			(status)
+
+* CREATE			(name) [desc]
+* DELETE
