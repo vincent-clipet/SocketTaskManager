@@ -6,9 +6,11 @@
 * GET_BY_WORKER		(worker)
 * GET_ALL
 
-* ASSIGN			(name)
+* ASSIGN			(worker)
 * STATUS			(status)
 * DESC				(desc)
 
-* CREATE			(name) [desc]
+* CREATE			(name)
 * DELETE
+
+* HELP

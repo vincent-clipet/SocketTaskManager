@@ -26,10 +26,10 @@ public class Task
 	//
 	// CONSTRUCTOR
 	//
-	public Task(String name, String desc, String author)
+	public Task(String name, String author)
 	{
 		this.name = name;
-		this.desc = desc;
+		this.desc = "No description yet ...";
 		this.author = author;
 		this.id = Task.currentId;
 		Task.currentId++;
@@ -50,9 +50,9 @@ public class Task
 		this.setStatus(status);
 	}
 
-	public boolean delete(String name)
+	public void delete()
 	{
-		return Task.tasks.remove(name) != null;
+		Task.tasks.remove(this.getName());
 	}
 
 
@@ -69,7 +69,7 @@ public class Task
 	{
 		return this.desc;
 	}
-	
+
 	public void setDesc(String desc)
 	{
 		this.desc = desc;

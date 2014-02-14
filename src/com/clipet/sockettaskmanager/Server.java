@@ -46,14 +46,14 @@ public class Server
 	private void welcome()
 	{
 		Socket socket = null;
-		Client client = null;
+		ServerRequestProcessor client = null;
 
 		while (true)
 		{
 			try
 			{
 				socket = this.server.accept();
-				client = new Client();
+				client = new ServerRequestProcessor();
 			}
 			catch (IOException e)
 			{
@@ -65,7 +65,7 @@ public class Server
 		}
 	}
 
-	private void processRequest(Socket socket, Client client)
+	private void processRequest(Socket socket, ServerRequestProcessor client)
 	{
 		PrintWriter toSend = null;
 		BufferedReader toRead = null;
