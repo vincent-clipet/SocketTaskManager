@@ -20,11 +20,11 @@ public class Server
 	//
 	// CONSTRUCTOR
 	//
-	public Server()
+	public Server(int port)
 	{
 		try
 		{
-			this.server = new ServerSocket(8599);
+			this.server = new ServerSocket(port);
 		}
 		catch (IOException e)
 		{
@@ -67,18 +67,18 @@ public class Server
 
 	private void processRequest(Socket socket, ServerRequestProcessor client)
 	{
-		PrintWriter toSend = null;
-		BufferedReader toRead = null;
+		PrintWriter output = null;
+		BufferedReader input = null;
 
 		try
 		{
-			toSend = new PrintWriter(socket.getOutputStream(), true);	
-			toRead = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			String line = toRead.readLine();
+			output = new PrintWriter(socket.getOutputStream(), true);	
+			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			String line = input.readLine();
 
 			String answer = client.processRequest(line);
 
-			toSend.println(answer);
+			output.println(answer);
 		}
 		catch (IOException e)
 		{
@@ -90,7 +90,32 @@ public class Server
 
 
 	//
-	// GET & SET
+	// MAIN
 	//
+	public static void main(String[] args)
+	{
+		if (args.length <= 1)
+		{
+			System.out.println("ERROR :: Invalid parameters number : \njava Server [port]");
+			System.exit(1);
+		}
+		else
+		{
+			int port = -1;
+
+			try
+			{
+				port = Integer.valueOf(args[1]);
+			}
+			catch (NumberFormatException exc)
+			{
+				System.out.println("ERROR :: '" + args[2] + "' is not a valid port !");
+				System.exit(1);
+			}
+			
+			Server s = new Server(port);
+			s.start();
+		}
+	}
 
 }
