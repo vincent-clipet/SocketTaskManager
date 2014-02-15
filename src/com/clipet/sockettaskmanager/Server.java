@@ -33,27 +33,23 @@ public class Server
 		}
 	}
 
-	public void start()
-	{
-		welcome();
-	}
-
 
 
 	//
 	// METHODS
 	//
-	private void welcome()
+	private void run()
 	{
 		Socket socket = null;
-		ServerRequestProcessor client = null;
+		ServerRequestProcessor processor = null;
 
 		while (true)
 		{
 			try
 			{
 				socket = this.server.accept();
-				client = new ServerRequestProcessor();
+				System.out.println("INFO - New client : " + socket.getInetAddress().getHostAddress());
+				processor = new ServerRequestProcessor();
 			}
 			catch (IOException e)
 			{
@@ -61,29 +57,70 @@ public class Server
 				System.exit(1);
 			}
 
-			processRequest(socket, client);
+			PrintWriter toSend = null;
+			BufferedReader toRead = null;
+
+			try
+			{
+				toSend = new PrintWriter(socket.getOutputStream(), true);	
+				toRead = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+				System.exit(1);
+			}
+
+			(new ClientThread(this, socket, toSend, toRead, processor)).run();
 		}
 	}
 
-	private void processRequest(Socket socket, ServerRequestProcessor client)
+	private void processRequests(Socket socket, PrintWriter toSend, BufferedReader toRead, ServerRequestProcessor client)
 	{
-		PrintWriter output = null;
-		BufferedReader input = null;
-
 		try
 		{
-			output = new PrintWriter(socket.getOutputStream(), true);	
-			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			String line = input.readLine();
+			String line = toRead.readLine();
 
-			String answer = client.processRequest(line);
+			while (! line.equalsIgnoreCase("exit"))
+			{
+				String answer = client.processRequest(line);
+				toSend.println(answer + "\n;;;");
+				line = toRead.readLine();
+			}
 
-			output.println(answer);
+			socket.close();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			System.exit(1);
+		}
+	}
+
+
+
+	//
+	// CLASSES
+	//
+	private class ClientThread extends Thread
+	{
+		private Server serv;
+		private Socket socket;
+		private PrintWriter output;
+		private BufferedReader input;
+		ServerRequestProcessor processor;
+
+		public ClientThread(Server serv, Socket socket, PrintWriter toSend, BufferedReader toRead, ServerRequestProcessor client)
+		{
+			this.serv = serv;
+			this.socket = socket;
+			this.output = toSend;
+			this.input = toRead;
+			this.processor = client;
+		}
+
+		public void run()
+		{
+			this.serv.processRequests(this.socket, this.output, this.input, this.processor);
 		}
 	}
 
@@ -94,7 +131,7 @@ public class Server
 	//
 	public static void main(String[] args)
 	{
-		if (args.length <= 1)
+		if (args.length < 1)
 		{
 			System.out.println("ERROR :: Invalid parameters number : \njava Server [port]");
 			System.exit(1);
@@ -105,16 +142,15 @@ public class Server
 
 			try
 			{
-				port = Integer.valueOf(args[1]);
+				port = Integer.valueOf(args[0]);
 			}
 			catch (NumberFormatException exc)
 			{
-				System.out.println("ERROR :: '" + args[2] + "' is not a valid port !");
+				System.out.println("ERROR :: '" + args[0] + "' is not a valid port !");
 				System.exit(1);
 			}
-			
-			Server s = new Server(port);
-			s.start();
+
+			(new Server(port)).run();
 		}
 	}
 

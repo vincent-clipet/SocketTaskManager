@@ -39,7 +39,7 @@ public class ServerRequestProcessor
 
 	private String dispatch(String line)
 	{
-		String[] cut = line.split(line);
+		String[] cut = (line.contains(" ") ? line.split(" ") : new String[] {line});
 
 		if (cut[0].equalsIgnoreCase(EnumCommands.LOGIN.getCmd()))
 			return login(cut[1]);
@@ -185,7 +185,7 @@ public class ServerRequestProcessor
 		else
 		{
 			this.lastTask = new Task(name, this.login);
-			return "Task '" + name + "' created :\n";
+			return "Task '" + name + "' created :\n" + this.lastTask.toString();
 		}
 	}
 

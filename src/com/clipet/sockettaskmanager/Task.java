@@ -170,8 +170,19 @@ public class Task
 
 	public String toString()
 	{
-		//TODO
-		return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append("========== " + this.name + " ==========").append("\n")
+		.append("ID : " + this.id).append("\n")
+		.append("Created by : " + this.author).append("\n")
+		.append("Description : " + this.desc).append("\n");
+
+		if (worker != null)
+			sb.append("Status : " + this.status).append("\n");
+
+		if (worker != null)
+			sb.append("Worker : " + this.worker).append("\n");
+
+		return sb.toString();
 	}
 
 }

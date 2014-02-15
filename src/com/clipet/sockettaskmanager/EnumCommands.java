@@ -47,17 +47,23 @@ public enum EnumCommands
 	//
 	// METHODS
 	//
-	public static boolean contains(String cmd)
+	public static EnumCommands contains(String cmd)
 	{
-		return EnumCommands.valueOf(cmd) != null;
+		for (EnumCommands ec : EnumCommands.values())
+		{
+			if (ec.getCmd().equalsIgnoreCase(cmd))
+				return ec;
+		}
+
+		return null;
 	}
 
 	public static String validateRequest(String line)
 	{
 		String[] cutLine = line.split(" ");
-		EnumCommands ec = EnumCommands.valueOf(cutLine[0]);
+		EnumCommands ec = EnumCommands.contains(cutLine[0]);
 
-		if (! EnumCommands.contains(cutLine[0]))
+		if (ec == null)
 		{
 			return "ERROR :: This command does not exist !\nSee command 'HELP' if you are lost";
 		}
@@ -65,8 +71,8 @@ public enum EnumCommands
 		{
 			String ret = "ERROR :: Wrong number of parameters !\n" + ec.getCmd();
 
-			for (int i = 1; i < cutLine.length; i++)
-				ret += " [" + ec.getArgs()[i-1] + "]";
+			for (String arg : ec.getArgs())
+				ret += " [" + arg + "]";
 
 			return ret;
 		}
