@@ -1,0 +1,2 @@
+- Implement status restrictions
+* DESC/STATUS/ASSIGN don't accept more than 1 word as parameter

@@ -129,29 +129,31 @@ public class Server
 	//
 	// MAIN
 	//
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String sPort;
+		int port = -1;
+
 		if (args.length < 1)
 		{
-			System.out.println("ERROR :: Invalid parameters number : \njava Server [port]");
-			System.exit(1);
+			System.out.println("Port ?");
+			sPort = br.readLine();
 		}
 		else
+			sPort = args[0];
+
+		try
 		{
-			int port = -1;
-
-			try
-			{
-				port = Integer.valueOf(args[0]);
-			}
-			catch (NumberFormatException exc)
-			{
-				System.out.println("ERROR :: '" + args[0] + "' is not a valid port !");
-				System.exit(1);
-			}
-
-			(new Server(port)).run();
+			port = Integer.valueOf(args[0]);
 		}
+		catch (NumberFormatException exc)
+		{
+			System.out.println("ERROR :: '" + sPort + "' is not a valid port !");
+			System.exit(1);
+		}
+
+		(new Server(port)).run();
 	}
 
 }

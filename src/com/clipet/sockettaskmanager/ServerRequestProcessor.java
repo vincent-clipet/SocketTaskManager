@@ -29,18 +29,17 @@ public class ServerRequestProcessor
 	//
 	public String processRequest(String line)
 	{
-		String ret = EnumCommands.validateRequest(line);
+		String[] cut = (line.contains(" ") ? line.split(" ") : new String[] {line});
+		String ret = EnumCommands.validateRequest(cut);
 
 		if (ret == null)
-			return dispatch(line);
+			return dispatch(cut);
 		else
 			return ret;
 	}
 
-	private String dispatch(String line)
+	private String dispatch(String[] cut)
 	{
-		String[] cut = (line.contains(" ") ? line.split(" ") : new String[] {line});
-
 		if (cut[0].equalsIgnoreCase(EnumCommands.LOGIN.getCmd()))
 			return login(cut[1]);
 		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_BY_ID.getCmd()))
@@ -56,11 +55,11 @@ public class ServerRequestProcessor
 		else if (cut[0].equalsIgnoreCase(EnumCommands.ASSIGN.getCmd()))
 			return assignTo(cut[1]);
 		else if (cut[0].equalsIgnoreCase(EnumCommands.STATUS.getCmd()))
-			return setStatus(cut[1]);
+			return setStatus(remainingArgsToString(cut, 1));
 		else if (cut[0].equalsIgnoreCase(EnumCommands.DESC.getCmd()))
-			return setDesc(cut[1]);
+			return setDesc(remainingArgsToString(cut, 1));
 		else if (cut[0].equalsIgnoreCase(EnumCommands.CREATE.getCmd()))
-			return create(cut[1]);
+			return create(remainingArgsToString(cut, 1));
 		else if (cut[0].equalsIgnoreCase(EnumCommands.DELETE.getCmd()))
 			return delete();
 		else if (cut[0].equalsIgnoreCase(EnumCommands.HELP.getCmd()))
@@ -180,20 +179,13 @@ public class ServerRequestProcessor
 
 	private String create(String name)
 	{
-		if (this.login == null)
-			return "You must be logged in to create a new task !";
-		else
-		{
-			this.lastTask = new Task(name, this.login);
-			return "Task '" + name + "' created :\n" + this.lastTask.toString();
-		}
+		this.lastTask = new Task(name, this.login);
+		return "Task '" + name + "' created :\n" + this.lastTask.toString();
 	}
 
 	private String delete()
 	{
-		if (this.login == null)
-			return "You must be logged in to delete a task !";
-		else if (this.login != this.lastTask.getAuthor())
+		if (this.login != this.lastTask.getAuthor())
 			return "You cannot delete a task you did not create !";
 		else
 		{
@@ -223,7 +215,20 @@ public class ServerRequestProcessor
 			sb.append(iter.toString()).append("\n");
 
 		int length = sb.length();
-		sb.delete(length - 2, length - 1);
+		sb.delete(length - 1, length);
+
+		return sb.toString();
+	}
+
+	private String remainingArgsToString(String[] cut, int startIndex)
+	{
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = startIndex; i < cut.length; i++)
+			sb.append(cut[i] + " ");
+		
+		int length = sb.length();
+		sb.delete(length - 1, length);
 
 		return sb.toString();
 	}

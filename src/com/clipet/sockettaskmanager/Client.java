@@ -13,24 +13,27 @@ public class Client
 	//
 	// ATTRIBUTES
 	//
-	Socket socket = null;
-	PrintWriter output = null;
-	BufferedReader input = null;
+	private Socket socket = null;
+	private PrintWriter output = null;
+	private BufferedReader input = null;
+	private final String login;
 
 
 
 	//
 	// CONSTRUCTOR
 	//
-	public Client(String host, int port)
+	public Client(String host, int port, String login)
 	{
+		this.login = login;
+
 		try
 		{
 			this.socket = new Socket(host, port);
 		}
 		catch (UnknownHostException e)
 		{
-			e.printStackTrace();
+			System.out.println("ERROR :: Host unknown !");
 			System.exit(1);
 		}
 		catch (IOException e)
@@ -56,10 +59,23 @@ public class Client
 	//
 	// METHODS
 	//
-	public void run()
+	public void run() throws IOException
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String line = "";
+
+		System.out.println("LOGIN " + this.login);
+		this.output.println("LOGIN " + this.login);
+		String line = this.input.readLine();
+
+		StringBuilder fullLogin = new StringBuilder();
+		
+		while (! line.equals(";;;"))
+		{
+			fullLogin.append(line + "\n");
+			line = this.input.readLine();
+		}
+
+		System.out.println("> " + fullLogin.toString());
 
 		while (! line.equalsIgnoreCase("exit"))
 		{
@@ -73,11 +89,11 @@ public class Client
 
 				while (! s.equals(";;;"))
 				{
-					fullLine.append(s + "\n");
+					fullLine.append("> " + s + "\n");
 					s = this.input.readLine();
 				}
 
-				System.out.println("> " + fullLine.toString());
+				System.out.println(fullLine.toString());
 			}
 			catch (IOException e)
 			{
@@ -110,29 +126,46 @@ public class Client
 	//
 	// MAIN
 	//
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String host = "";
+		String sPort = "";
+		int port = -1;
+		String login = "";
+
 		if (args.length < 2)
 		{
-			System.out.println("ERROR :: Invalid parameters number : \njava Client [host] [port]");
-			System.exit(1);
+			System.out.println("Host ?");
+			host = br.readLine();
+			System.out.println("Port ?");
+			sPort = br.readLine();
 		}
 		else
 		{
-			int port = -1;
-
-			try
-			{
-				port = Integer.valueOf(args[1]);
-			}
-			catch (NumberFormatException exc)
-			{
-				System.out.println("ERROR :: '" + args[1] + "' is not a valid port !");
-				System.exit(1);
-			}
-
-			(new Client(args[0], port)).run();
+			host = args[0];
+			sPort = args[1];
 		}
+
+		try
+		{
+			port = Integer.valueOf(sPort);
+		}
+		catch (NumberFormatException exc)
+		{
+			System.out.println("ERROR :: '" + sPort + "' is not a valid port !");
+			System.exit(1);
+		}
+
+		while (login.equals(""))
+		{
+			System.out.println("Login ? ");
+			login = br.readLine();
+		}
+
+		System.out.println("\n\n===========================================\n\n");
+
+		(new Client(host, port, login)).run();
 	}
 
 }

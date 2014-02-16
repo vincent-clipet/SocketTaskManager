@@ -58,16 +58,13 @@ public enum EnumCommands
 		return null;
 	}
 
-	public static String validateRequest(String line)
+	public static String validateRequest(String[] cut)
 	{
-		String[] cutLine = line.split(" ");
-		EnumCommands ec = EnumCommands.contains(cutLine[0]);
+		EnumCommands ec = EnumCommands.contains(cut[0]);
 
 		if (ec == null)
-		{
 			return "ERROR :: This command does not exist !\nSee command 'HELP' if you are lost";
-		}
-		else if (ec.getArgs().length != cutLine.length - 1)
+		else if (ec.getArgs().length > cut.length - 1)
 		{
 			String ret = "ERROR :: Wrong number of parameters !\n" + ec.getCmd();
 

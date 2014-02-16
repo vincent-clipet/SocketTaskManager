@@ -176,7 +176,7 @@ public class Task
 		.append("Created by : " + this.author).append("\n")
 		.append("Description : " + this.desc).append("\n");
 
-		if (worker != null)
+		if (status != null)
 			sb.append("Status : " + this.status).append("\n");
 
 		if (worker != null)
