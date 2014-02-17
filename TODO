@@ -1,2 +1,4 @@
 - Implement status restrictions
 * DESC/STATUS/ASSIGN don't accept more than 1 word as parameter
+- Example Netcat Shell script
+- Implement error codes ?
