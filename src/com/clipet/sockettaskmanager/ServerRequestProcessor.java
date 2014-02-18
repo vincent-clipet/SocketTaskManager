@@ -165,7 +165,7 @@ public class ServerRequestProcessor
 
 			if (es == null)
 			{
-				EnumStatus[] values = es.values();
+				EnumStatus[] values = EnumStatus.values();
 				StringBuilder sb = new StringBuilder(values[0].getStatus());
 
 				for (int i = 1; i < values.length; i++)
@@ -213,8 +213,13 @@ public class ServerRequestProcessor
 
 	private String getHelp()
 	{
-		//TODO
-		return "HELP !";
+		StringBuilder sb = new StringBuilder("Available commands :\n\n");
+		EnumCommands[] values = EnumCommands.values();
+
+		for (EnumCommands ec : values)
+			sb.append(ec.getHelp() + "\n");
+
+		return sb.toString();
 	}
 
 

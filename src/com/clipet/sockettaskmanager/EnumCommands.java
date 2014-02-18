@@ -6,22 +6,22 @@ public enum EnumCommands
 	//
 	// ENUM
 	//
-	LOGIN("LOGIN", "name"),
+	LOGIN("LOGIN", "Login.", "name"),
 
-	GET_BY_ID("GET_BY_ID", "id"),
-	GET_BY_NAME("GET_BY_NAME", "name"),
-	GET_BY_STATUS("GET_BY_STATUS", "status"),
-	GET_BY_WORKER("GET_BY_WORKER", "worker"),
-	GET_ALL("GET_ALL"),
+	GET_BY_ID("GET_BY_ID", "Retrieve a task with this ID.", "id"),
+	GET_BY_NAME("GET_BY_NAME", "Retrieve a task with this name.", "name"),
+	GET_BY_STATUS("GET_BY_STATUS", "Retrieve all tasks with this status.", "status"),
+	GET_BY_WORKER("GET_BY_WORKER", "Retrieve all tasks assigned to this worker", "worker"),
+	GET_ALL("GET_ALL", "Retrieve all tasks."),
 
-	ASSIGN("ASSIGN", "worker"),
-	STATUS("STATUS", "status"),
-	DESC("DESC", "desc"),
+	ASSIGN("ASSIGN", "Assign this worker to the selected task.", "worker"),
+	STATUS("STATUS", "Set this status to the selected task.", "status"),
+	DESC("DESC", "Assign this description to the selected task.", "desc"),
 
-	CREATE("CREATE", "name"),
-	DELETE("DELETE"),
+	CREATE("CREATE", "Create a new task.", "name"),
+	DELETE("DELETE", "Delete selected task."),
 
-	HELP("HELP");
+	HELP("HELP", "Print this page.");
 
 
 
@@ -29,6 +29,7 @@ public enum EnumCommands
 	// ATTRIBUTES
 	//
 	private String cmd;
+	private String desc;
 	private String[] args;
 
 
@@ -36,9 +37,10 @@ public enum EnumCommands
 	//
 	// CONSTRUCTOR
 	//
-	EnumCommands(String cmd, String... args)
+	EnumCommands(String cmd, String desc, String... args)
 	{
 		this.cmd = cmd;
+		this.desc = desc;
 		this.args = args;
 	}
 
@@ -65,14 +67,7 @@ public enum EnumCommands
 		if (ec == null)
 			return "ERROR :: This command does not exist !\nSee command 'HELP' if you are lost";
 		else if (ec.getArgs().length > cut.length - 1)
-		{
-			String ret = "ERROR :: Wrong number of parameters !\n" + ec.getCmd();
-
-			for (String arg : ec.getArgs())
-				ret += " [" + arg + "]";
-
-			return ret;
-		}
+			return "ERROR :: Wrong number of parameters !\n" + ec.toString();
 		else
 			return null;
 	}
@@ -91,4 +86,25 @@ public enum EnumCommands
 	{
 		return this.args;
 	}
+
+
+
+	//
+	// UTIL
+	//
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder(this.cmd);
+
+		for (String arg : this.args)
+			sb.append(" [" + arg + "]");
+
+		return sb.toString();
+	}
+
+	public String getHelp()
+	{
+		return this.toString() + "\n\t==> " + this.desc;
+	}
+
 }
