@@ -136,7 +136,7 @@ public class Task
 		{
 			Task t = entry.getValue();
 
-			if (t.getWorker().equals(worker))
+			if (t.getWorker().equalsIgnoreCase(worker))
 				ret.add(t);
 		}
 
@@ -151,7 +151,7 @@ public class Task
 		{
 			Task t = entry.getValue();
 
-			if (t.getStatus().equals(status))
+			if (t.getStatus().equalsIgnoreCase(status))
 				ret.add(t);
 		}
 

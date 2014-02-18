@@ -1,0 +1,25 @@
+LOGIN testuser
+CREATE Documentation
+DESC Write documentation for the project
+ASSIGN user1
+STATUS assigned
+CREATE Implement command 'LIST'
+DESC The program must be able to return all tasks assigned to the current user
+STATUS done
+CREATE Implement command 'HELP [cmd]'
+DESC Prints detailed help for a specific command
+STATUS free
+CREATE Users list
+DESC Implement list of currently connected users
+ASSIGN user1
+STATUS done
+CREATE Fix handling of IOException
+ASSIGN user1
+STATUS assigned
+GET_ALL
+GET_ID 2
+GET_NAME Documentation
+GET_WORKER user1
+GET_STATUS done
+DELETE
+EXIT
