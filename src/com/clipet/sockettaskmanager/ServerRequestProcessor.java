@@ -220,9 +220,16 @@ public class ServerRequestProcessor
 
 	private String create(String name)
 	{
-		this.lastTasks = new ArrayList<Task>(1);
-		this.lastTasks.add(new Task(name, this.login));
-		return "Task '" + name + "' created :\n" + this.lastTasks.get(0).toString();
+		Task t = Task.getTaskByName(name);
+
+		if (t != null)
+			return "ERROR :: A task named '" + name + "' already exists !";
+		else
+		{		
+			this.lastTasks = new ArrayList<Task>(1);
+			this.lastTasks.add(new Task(name, this.login));
+			return "Task '" + name + "' created :\n" + this.lastTasks.get(0).toString();
+		}
 	}
 
 	private String delete()

@@ -109,7 +109,7 @@ public class Task
 
 	//
 	// UTIL
-	//	
+	//
 	public static Task getTaskByName(String name)
 	{
 		return Task.tasks.get(name);

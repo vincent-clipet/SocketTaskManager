@@ -65,7 +65,7 @@ public class Server
 
 		try
 		{
-			port = Integer.valueOf(args[0]);
+			port = Integer.valueOf(sPort);
 		}
 		catch (NumberFormatException exc)
 		{

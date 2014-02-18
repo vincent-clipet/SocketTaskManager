@@ -68,7 +68,7 @@ public class Client
 		String line = this.input.readLine();
 
 		StringBuilder fullLogin = new StringBuilder();
-		
+
 		while (! line.equals(";;;"))
 		{
 			fullLogin.append(line + "\n");
@@ -87,13 +87,14 @@ public class Client
 				String s = this.input.readLine();
 				StringBuilder fullLine = new StringBuilder();
 
-				while (! s.equals(";;;"))
+				while (s != null && ! s.equals(";;;"))
 				{
 					fullLine.append("> " + s + "\n");
 					s = this.input.readLine();
 				}
 
-				System.out.println(fullLine.toString());
+				if (fullLine.length() != 0)
+					System.out.println(fullLine.toString());
 			}
 			catch (IOException e)
 			{
