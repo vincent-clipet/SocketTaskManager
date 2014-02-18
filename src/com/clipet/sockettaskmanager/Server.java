@@ -3,9 +3,7 @@ package com.clipet.sockettaskmanager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class Server
 {
@@ -38,89 +36,11 @@ public class Server
 	//
 	// METHODS
 	//
-	private void run()
+	private void run() throws IOException
 	{
-		Socket socket = null;
-		ServerRequestProcessor processor = null;
-
 		while (true)
 		{
-			try
-			{
-				socket = this.server.accept();
-				System.out.println("INFO - New client : " + socket.getInetAddress().getHostAddress());
-				processor = new ServerRequestProcessor();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-				System.exit(1);
-			}
-
-			PrintWriter toSend = null;
-			BufferedReader toRead = null;
-
-			try
-			{
-				toSend = new PrintWriter(socket.getOutputStream(), true);	
-				toRead = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-				System.exit(1);
-			}
-
-			(new ClientThread(this, socket, toSend, toRead, processor)).run();
-		}
-	}
-
-	private void processRequests(Socket socket, PrintWriter toSend, BufferedReader toRead, ServerRequestProcessor client)
-	{
-		try
-		{
-			String line = toRead.readLine();
-
-			while (! line.equalsIgnoreCase("exit"))
-			{
-				String answer = client.processRequest(line);
-				toSend.println(answer + "\n;;;");
-				line = toRead.readLine();
-			}
-
-			socket.close();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-
-
-	//
-	// CLASSES
-	//
-	private class ClientThread extends Thread
-	{
-		private Server serv;
-		private Socket socket;
-		private PrintWriter output;
-		private BufferedReader input;
-		ServerRequestProcessor processor;
-
-		public ClientThread(Server serv, Socket socket, PrintWriter toSend, BufferedReader toRead, ServerRequestProcessor client)
-		{
-			this.serv = serv;
-			this.socket = socket;
-			this.output = toSend;
-			this.input = toRead;
-			this.processor = client;
-		}
-
-		public void run()
-		{
-			this.serv.processRequests(this.socket, this.output, this.input, this.processor);
+			new ClientThread(this.server.accept());
 		}
 	}
 
