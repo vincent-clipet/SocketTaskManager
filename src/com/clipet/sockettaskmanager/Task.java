@@ -33,8 +33,8 @@ public class Task
 		this.author = author;
 		this.id = Task.currentId;
 		Task.currentId++;
-		this.worker = null;
-		this.status = "libre";
+		this.worker = "Nobody assigned yet ...";
+		this.status = EnumStatus.FREE.getStatus();
 
 		Task.tasks.put(name, this);
 	}

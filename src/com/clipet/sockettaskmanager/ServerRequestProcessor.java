@@ -161,8 +161,23 @@ public class ServerRequestProcessor
 			return "ERROR :: No task selected !";
 		else
 		{
-			this.lastTask.setStatus(status);
-			return this.lastTask.toString();
+			EnumStatus es = EnumStatus.contains(status);
+
+			if (es == null)
+			{
+				EnumStatus[] values = es.values();
+				StringBuilder sb = new StringBuilder(values[0].getStatus());
+
+				for (int i = 1; i < values.length; i++)
+					sb.append(", " + values[i].getStatus());
+
+				return "ERROR :: Invalid status ! Availbale statuses are : " + sb.toString();
+			}
+			else
+			{
+				this.lastTask.setStatus(es.getStatus());
+				return this.lastTask.toString();
+			}
 		}
 	}
 
@@ -226,7 +241,7 @@ public class ServerRequestProcessor
 
 		for (int i = startIndex; i < cut.length; i++)
 			sb.append(cut[i] + " ");
-		
+
 		int length = sb.length();
 		sb.delete(length - 1, length);
 
