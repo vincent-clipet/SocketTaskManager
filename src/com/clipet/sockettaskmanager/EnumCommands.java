@@ -8,10 +8,10 @@ public enum EnumCommands
 	//
 	LOGIN("LOGIN", "Login.", "name"),
 
-	GET_BY_ID("GET_BY_ID", "Retrieve a task with this ID.", "id"),
-	GET_BY_NAME("GET_BY_NAME", "Retrieve a task with this name.", "name"),
-	GET_BY_STATUS("GET_BY_STATUS", "Retrieve all tasks with this status.", "status"),
-	GET_BY_WORKER("GET_BY_WORKER", "Retrieve all tasks assigned to this worker", "worker"),
+	GET_ID("GET_ID", "Retrieve a task with this ID.", "id"),
+	GET_NAME("GET_NAME", "Retrieve a task with this name.", "name"),
+	GET_STATUS("GET_STATUS", "Retrieve all tasks with this status.", "status"),
+	GET_WORKER("GET_WORKER", "Retrieve all tasks assigned to this worker", "worker"),
 	GET_ALL("GET_ALL", "Retrieve all tasks."),
 
 	ASSIGN("ASSIGN", "Assign this worker to the selected task.", "worker"),

@@ -42,13 +42,13 @@ public class ServerRequestProcessor
 	{
 		if (cut[0].equalsIgnoreCase(EnumCommands.LOGIN.getCmd()))
 			return login(cut[1]);
-		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_BY_ID.getCmd()))
+		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_ID.getCmd()))
 			return getById(cut[1]);
-		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_BY_NAME.getCmd()))
+		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_NAME.getCmd()))
 			return getByName(cut[1]);
-		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_BY_STATUS.getCmd()))
+		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_STATUS.getCmd()))
 			return getByStatus(cut[1]);
-		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_BY_WORKER.getCmd()))
+		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_WORKER.getCmd()))
 			return getByWorker(cut[1]);
 		else if (cut[0].equalsIgnoreCase(EnumCommands.GET_ALL.getCmd()))
 			return getAll();
@@ -120,6 +120,17 @@ public class ServerRequestProcessor
 
 	private String getByStatus(String status)
 	{
+		if (EnumStatus.contains(status) == null)
+		{
+			EnumStatus[] values = EnumStatus.values();
+			StringBuilder sb = new StringBuilder(values[0].getStatus());
+
+			for (int i = 1; i < values.length; i++)
+				sb.append(", " + values[i].getStatus());
+
+			return "ERROR :: Invalid status ! Available statuses are : " + sb.toString();
+		}
+
 		ArrayList<Task> tasks = Task.getTasksByStatus(status);
 
 		if (tasks.size() == 0)

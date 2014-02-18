@@ -11,15 +11,15 @@ java Server (port)
 # Client Commands
 -----------------
 - HELP
-- CREATE			(name)
+- CREATE		(name)
 - DELETE
-- ASSIGN			(worker)
-- STATUS			(status)
-- DESC				(desc)
-- GET_BY_ID			(id)
-- GET_BY_NAME		(name)
-- GET_BY_STATUS		(status)
-- GET_BY_WORKER		(worker)
+- ASSIGN		(worker)
+- STATUS		(status)
+- DESC			(desc)
+- GET_ID		(id)
+- GET_NAME		(name)
+- GET_STATUS	(status)
+- GET_WORKER	(worker)
 - GET_ALL
 
 
@@ -28,4 +28,5 @@ java Server (port)
 * Launch program
 * Enter host/port/login when asked
 * Use one of the above commands
-	(NB: 'active' commands (DELETE/ASSIGN/STATUS/DESC) require that you already have a selected task (with GET_BY_ID or GET_BY_NAME) 
+	(NB: 'active' commands (DELETE/ASSIGN/STATUS/DESC) require that you already have a selected task (with GET_ID or GET_NAME)
+	(NB: 'status' value must be in 'DONE/FREE/ASSIGNED') 
