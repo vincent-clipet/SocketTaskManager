@@ -8,7 +8,7 @@ public class ServerRequestProcessor
 	//
 	// ATTRIBUTES
 	//
-	private Task lastTask;
+	private ArrayList<Task> lastTasks;
 	private String login; 
 
 
@@ -19,7 +19,7 @@ public class ServerRequestProcessor
 	public ServerRequestProcessor()
 	{
 		this.login = null;
-		this.lastTask = null;
+		this.lastTasks = new ArrayList<Task>();
 	}
 
 
@@ -100,7 +100,8 @@ public class ServerRequestProcessor
 			return "ERROR :: No task with id '" + id + "' !";
 		else
 		{
-			this.lastTask = t;
+			this.lastTasks = new ArrayList<Task>(1);
+			this.lastTasks.add(t);
 			return t.toString();
 		}
 	}
@@ -113,7 +114,8 @@ public class ServerRequestProcessor
 			return "ERROR :: No task named '" + name + "' !";
 		else
 		{
-			this.lastTask = t;
+			this.lastTasks = new ArrayList<Task>(1);
+			this.lastTasks.add(t);
 			return t.toString();
 		}
 	}
@@ -136,7 +138,10 @@ public class ServerRequestProcessor
 		if (tasks.size() == 0)
 			return "ERROR :: No task with status '" + status + "' !";
 		else
+		{
+			this.lastTasks = tasks;
 			return taskListToString(tasks);
+		}
 	}
 
 	private String getByWorker(String worker)
@@ -146,29 +151,35 @@ public class ServerRequestProcessor
 		if (tasks.size() == 0)
 			return "ERROR :: No task for worker '" + worker + "' !";
 		else
+		{
+			this.lastTasks = tasks;
 			return taskListToString(tasks);
+		}
 	}
 
 	private String getAll()
 	{
 		ArrayList<Task> tasks = Task.getAllTasks();
+		this.lastTasks = tasks;
 		return taskListToString(tasks);
 	}
 
 	private String assignTo(String worker)
 	{
-		if (this.lastTask == null)
+		if (this.lastTasks.size() == 0)
 			return "ERROR :: No task selected !";
 		else
 		{
-			this.lastTask.setWorker(worker);
-			return this.lastTask.toString();
+			for (Task t : this.lastTasks)
+				t.setWorker(worker);
+
+			return taskListToString(this.lastTasks);
 		}	
 	}
 
 	private String setStatus(String status)
 	{
-		if (this.lastTask == null)
+		if (this.lastTasks.size() == 0)
 			return "ERROR :: No task selected !";
 		else
 		{
@@ -186,40 +197,50 @@ public class ServerRequestProcessor
 			}
 			else
 			{
-				this.lastTask.setStatus(es.getStatus());
-				return this.lastTask.toString();
+				for (Task t : this.lastTasks)
+					t.setStatus(es.getStatus());
+
+				return taskListToString(this.lastTasks);
 			}
 		}
 	}
 
 	private String setDesc(String desc)
 	{
-		if (this.lastTask == null)
+		if (this.lastTasks.size() == 0)
 			return "ERROR :: No task selected !";
 		else
 		{
-			this.lastTask.setDesc(desc);
-			return this.lastTask.toString();
+			for (Task t : this.lastTasks)
+				t.setDesc(desc);
+
+			return taskListToString(this.lastTasks);
 		}
 	}
 
 	private String create(String name)
 	{
-		this.lastTask = new Task(name, this.login);
-		return "Task '" + name + "' created :\n" + this.lastTask.toString();
+		this.lastTasks = new ArrayList<Task>(1);
+		this.lastTasks.add(new Task(name, this.login));
+		return "Task '" + name + "' created :\n" + this.lastTasks.get(0).toString();
 	}
 
 	private String delete()
 	{
-		if (this.login != this.lastTask.getAuthor())
-			return "You cannot delete a task you did not create !";
-		else
+		StringBuilder sb = new StringBuilder();
+
+		for (Task t : this.lastTasks)
 		{
-			String ret = this.lastTask.getName();
-			this.lastTask.delete();
-			this.lastTask = null;
-			return "Task '" + ret + "' deleted.";
+			if (this.login != t.getAuthor())
+				sb.append("Cannot delete task '" + t.getName() + "' because you did not created it !\n");
+			else
+			{
+				sb.append("Task '" + t.getName() + "' deleted.\n");
+				t.delete();
+			}
 		}
+
+		return sb.toString();
 	}
 
 	private String getHelp()
@@ -242,8 +263,13 @@ public class ServerRequestProcessor
 	{
 		StringBuilder sb = new StringBuilder();
 
-		for (Task iter : tasks)
-			sb.append(iter.toString()).append("\n");
+		if (tasks.size() == 0)
+			sb.append("No task selected !\n");
+		else
+		{
+			for (Task iter : tasks)
+				sb.append(iter.toString()).append("\n");
+		}
 
 		int length = sb.length();
 		sb.delete(length - 1, length);
